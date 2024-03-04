@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import ie.setu.borrowalift.models.Listings
+import ie.setu.borrowalift.models.Listing
 
 
 class ListingsAdapter (val context: Context, val listings:List<Listing>) :
@@ -31,13 +31,13 @@ class ListingsAdapter (val context: Context, val listings:List<Listing>) :
         val ivPost: ImageView = itemView.findViewById(R.id.ivPost)
         val tvRelativeTime: TextView = itemView.findViewById(R.id.tvRelativeTime)
 
-        fun bind(trip: Trip) {
-            tvUsername.text = trip.user?.username
-            tvDescription.text = trip.description
-            Glide.with(context).load(trip.imageUrl).into(ivPost)
+        fun bind(listing: Listing) {
+            tvUsername.text = listing.user?.username
+            tvDescription.text = listing.description
+            Glide.with(context).load(listing.imageUrl).into(ivPost)
             tvRelativeTime.text = DateUtils.getRelativeDateTimeString(
                 context,
-                trip.creationTimeMs,
+                listing.creationTimeMs,
                 DateUtils.MINUTE_IN_MILLIS,
                 DateUtils.WEEK_IN_MILLIS,
                 DateUtils.FORMAT_ABBREV_RELATIVE
