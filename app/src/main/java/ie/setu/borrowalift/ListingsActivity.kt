@@ -3,6 +3,7 @@ package ie.setu.borrowalift
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -86,6 +87,21 @@ class ListingsActivity : AppCompatActivity(), ListListener {
         intent.putExtra("listing_edit", listing)
         startActivity(intent)
     }
+
+    override fun onListingLongClick(listing: Listing) {
+        // Handle long press, for example, delete the listing from Firestore
+        firestoreDb.collection("listings")
+            .document(listing.description) // Assuming you have an 'id' field in your Listing class
+            .delete()
+            .addOnSuccessListener {
+                Toast.makeText(this, "Listing deleted", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Log.e(TAG, "Error deleting listing", e)
+                Toast.makeText(this, "Failed to delete listing", Toast.LENGTH_SHORT).show()
+            }
+    }
+
 
 }
 

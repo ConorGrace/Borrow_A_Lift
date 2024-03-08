@@ -13,6 +13,7 @@ import ie.setu.borrowalift.models.Listing
 
 interface ListListener {
     fun onListingClick(listing: Listing)
+    fun onListingLongClick(listing: Listing)
 }
 
 class ListingsAdapter(
@@ -41,6 +42,14 @@ class ListingsAdapter(
         val tvDescription: TextView = binding.tvDescription
         val ivPost: ImageView = binding.ivPost
         val tvRelativeTime: TextView = binding.tvRelativeTime
+
+        init {
+            // Long-click listener setup
+            binding.root.setOnLongClickListener {
+                listener?.onListingLongClick(listings[adapterPosition])
+                true // Return true to indicate that the long click is handled
+            }
+        }
 
         fun bind(listing: Listing, listener: ListListener?) {
             tvUsername.text = listing.user?.username
