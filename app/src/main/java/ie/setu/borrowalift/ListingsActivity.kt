@@ -3,6 +3,8 @@ package ie.setu.borrowalift
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +26,20 @@ class ListingsActivity : AppCompatActivity(), ListListener {
         private lateinit var firestoreDb: FirebaseFirestore
         private lateinit var listings:MutableList<Listing>
         private lateinit var adapter: ListingsAdapter
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_listings, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_logout) {
+            Log.i(TAG, "User Wants to logout")
+            FirebaseAuth.getInstance().signOut()
+            startActivity(Intent(this, LogInActivity::class.java))
+        }
+        return super.onOptionsItemSelected(item)
+    }
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.activity_listings)
@@ -88,10 +104,11 @@ class ListingsActivity : AppCompatActivity(), ListListener {
         startActivity(intent)
     }
 
+
+
     override fun onListingLongClick(listing: Listing) {
-        // Handle long press, for example, delete the listing from Firestore
         firestoreDb.collection("listings")
-            .document(listing.description) // Assuming you have an 'id' field in your Listing class
+            .document(listing.description)
             .delete()
             .addOnSuccessListener {
                 Toast.makeText(this, "Listing deleted", Toast.LENGTH_SHORT).show()
