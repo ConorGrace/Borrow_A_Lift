@@ -37,8 +37,9 @@ class CreateActivity : AppCompatActivity() {
     private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        var edit = false
         setContentView(R.layout.activity_create)
-        val selectedListing = intent.getSerializableExtra("SELECTED_LISTING") as? Listing
+
         storageReference = FirebaseStorage.getInstance().reference
         firestoreDb = FirebaseFirestore.getInstance()
         firestoreDb.collection("users")
@@ -58,6 +59,17 @@ class CreateActivity : AppCompatActivity() {
         btnLocation = findViewById(R.id.btnLocation)
         etVehicleType = findViewById(R.id.etVehicleType)
         etDescription = findViewById(R.id.etDescription)
+
+        val selectedListing: Listing? = intent.getParcelableExtra("listing_edit")
+
+        if (intent.hasExtra("listing_edit")) {
+            edit = true
+            if (selectedListing != null) {
+                etDescription.setText(selectedListing.description)
+                etVehicleType.setText(selectedListing.vehicleType)
+            }
+        }
+
 
         btnPickImage.setOnClickListener{
             Log.i(TAG, "Open up image picker on Device")

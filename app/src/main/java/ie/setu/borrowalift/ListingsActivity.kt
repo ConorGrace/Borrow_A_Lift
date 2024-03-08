@@ -13,10 +13,11 @@ import com.google.firebase.firestore.Query
 import ie.setu.borrowalift.models.Listing
 import ie.setu.borrowalift.models.User
 
+
 private const val TAG = "PostsActivity"
 private const val EXTRA_USERNAME = "EXTRA_USERNAME"
 
-class ListingsActivity : AppCompatActivity() {
+class ListingsActivity : AppCompatActivity(), ListListener {
 
         private var signedInUser: User? = null
         private lateinit var firestoreDb: FirebaseFirestore
@@ -27,8 +28,9 @@ class ListingsActivity : AppCompatActivity() {
             setContentView(R.layout.activity_listings)
             val rvPosts: RecyclerView = findViewById(R.id.rvPosts)
 
+
             listings = mutableListOf()
-            adapter = ListingsAdapter(this, listings)
+            adapter = ListingsAdapter(this, listings, this)
 
             rvPosts.adapter = adapter
             rvPosts.layoutManager = LinearLayoutManager(this)
@@ -66,6 +68,8 @@ class ListingsActivity : AppCompatActivity() {
                     Log.i(TAG, "Document ${listing}")
                 }
             }
+
+
             val fabCreate: FloatingActionButton = findViewById(R.id.fabCreate)
 
             fabCreate.setOnClickListener {
@@ -73,4 +77,15 @@ class ListingsActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+
+
+
+    override fun onListingClick(listing: Listing) {
+        Log.d(TAG, "Clicked on listing: $listing")
+        val intent = Intent(this, CreateActivity::class.java)
+        intent.putExtra("listing_edit", listing)
+        startActivity(intent)
     }
+
+}
+
